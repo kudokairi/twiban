@@ -139,18 +139,48 @@ li {
 
 .msg {
 	clear: both;
+	display:flex;
 	border-top: 1px solid #ccc;
 	padding: 10px 0;
 }
+
+.main_msg{
+border-top: 1px solid #ccc;
+padding: 10px 0;
+}
+
+.main_msg img {
+float: left;
+margin-right: 5px;
+}
+
 .msg img {
 	float: left;
 	margin-right: 5px;
 }
-.msg p {
-	margin: 0;
+
+
+.message_img{
+	width:45%;
+
+	margin-right:3%
+}
+
+.message_text{
+	width:50%;
+
 }
 .msg .day,
 .msg .day a {
 	font-size: 80%;
 	color: #999;
+}
+
+.main_msg .day a {
+	font-size: 80%;
+	color: #999;
+}
+
+.name{
+	font-weight:bold;
 }
