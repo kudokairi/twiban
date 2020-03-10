@@ -92,7 +92,7 @@ if(isset($_REQUEST['res'])){
       </div>
     </form>
 <?php foreach ($posts as $post): ?>
-    <div class="msg">
+    <div class="main_msg">
     <img src="member_picture/<?php print(htmlspecialchars($post['picture'], ENT_QUOTES)); ?>" width="48" height="48" alt="<?php print(htmlspecialchars($post['name'], ENT_QUOTES)); ?>" />
     <?php if($post['reply_message_id'] > 0): ?>
     <?php
