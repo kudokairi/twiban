@@ -15,37 +15,41 @@ $posts->execute(array($_REQUEST['id'],$_REQUEST['id']));
 
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>ひとこと掲示板</title>
 
-	<link rel="stylesheet" href="style.css" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ひとこと掲示板</title>
+
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-<div id="wrap">
-  <div id="head">
-    <h1>ひとこと掲示板</h1>
-  </div>
-  <div id="content">
-  <p>&laquo;<a href="index.php">一覧にもどる</a></p>
-  <?php foreach($posts as $posted): ?>
-        <div class="msg">
-            <div class="message_img">
-                <img src="member_picture/<?php print(htmlspecialchars($posted['picture'])); ?>"width='300px' height='auto'> 
-            </div>
-            <div class="message_text">
-                <p><span class="name"><?php print(htmlspecialchars($posted['name'])); ?></span>　<span class="day"><?php print(htmlspecialchars($posted['created'])); ?></span></p>
-                <p><?php print(htmlspecialchars($posted['message'])); ?></p>
-            </div>
+    <div id="wrap">
+        <div id="head">
+            <h1>ひとこと掲示板</h1>
         </div>
-    <?php endforeach; ?>
-    <?php if(empty($posted)): ?>
-	<p>その投稿は削除されたか、URLが間違えています</p>
-  <?php endif; ?>
-</div>
-</div>
+        <div id="content">
+            <p>&laquo;<a href="index.php">一覧にもどる</a></p>
+            <?php foreach($posts as $posted): ?>
+            <div class="msg">
+                <div class="message_img">
+                    <img src="member_picture/<?php print(htmlspecialchars($posted['picture'])); ?>" width='300px'
+                        height='auto'>
+                </div>
+                <div class="message_text">
+                    <p><span class="name"><?php print(htmlspecialchars($posted['name'])); ?></span>　<span
+                            class="day"><?php print(htmlspecialchars($posted['created'])); ?></span></p>
+                    <p><?php print(htmlspecialchars($posted['message'])); ?></p>
+                </div>
+            </div>
+            <?php endforeach; ?>
+            <?php if(empty($posted)): ?>
+            <p>その投稿は削除されたか、URLが間違えています</p>
+            <?php endif; ?>
+        </div>
+    </div>
 </body>
+
 </html>
