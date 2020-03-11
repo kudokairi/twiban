@@ -1,7 +1,7 @@
 * {
 	margin:0;
 	padding:0;
-　}
+ÃƒÆ’Ã‚Â£ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬}
 
 body{
 	font:13px/1.231 arial,helvetica,clean,sans-serif;
@@ -23,10 +23,14 @@ pre,code,kbd,samp,tt{
 	line-height:100%;
 }
 
+html{
+	height: 100%;
+}
 
 body {
     background-color:#eeeeee;
-    color: #333;
+	color: #333;
+	height: 100%;
 }
 
 #content div a{
@@ -34,8 +38,10 @@ font-size:16px;
 }
 
 #wrap {
+	display: flex;
 	width: 100%;
 	margin: 0 auto;
+	height: 100%;
 }
 
 #head {
@@ -45,7 +51,6 @@ font-size:16px;
 	background:bottom left repeat-x #106eb7;
 	color: #fff;
 	padding: 20px;
-	margin-bottom: 20px;
 }
 
 h1 {
@@ -85,6 +90,7 @@ dt {
 	padding-left: 5px;
 	margin-bottom: 5px;
 }
+
 dd {
 	margin-bottom: 0.5em;
 }
@@ -183,4 +189,100 @@ margin-right: 5px;
 
 .name{
 	font-weight:bold;
+}
+
+
+.mypage_img{
+	text-align: center;
+	border: 0;
+	margin-top: 10px;
+}
+
+.mypage_name{
+	text-align: center;
+	border: 0;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.mypage_article{
+	text-align: center;
+    border-bottom: #ccc solid;
+    max-width: 500px;
+    width: 100%;
+    margin: 25px auto;
+}
+
+.mypage_article:nth-child(3){
+	margin-top: 40px;
+
+}
+.mypage_article p{
+	font-size: 16px;
+} 
+
+.profile{
+	max-width:100%;
+	margin: 10px 10px; 
+}
+.profile img{
+  max-width: 350px;
+  width:100%;
+}
+
+.profile div{
+  margin-bottom:30px;
+}
+
+.profile_tweet{
+  max-width: 350px;
+  width:100%;
+  height: 100px;
+}
+
+.profile_name{
+  font-size: 20px;
+}
+
+.profile_submit{
+	font-size:20px;
+	width:100%;
+	height:100%;
+}
+
+.mypage_changes{
+	display:flex;
+	justify-content:space-between;
+	max-width:500px;
+	width:100%;
+	margin:0 auto;
+	padding:0;
+}
+
+.mypage_change{
+	margin:0;
+	border:0;
+
+}
+
+.mypage_changes_button{
+	display:flex;
+	justify-content:space-between;
+	max-width:500px;
+	width:100%;
+	margin:0 auto;
+	padding:0;
+}
+
+.mypage_changes_submit{
+	text-align: center;
+	margin: 0 auto;
+}
+
+.back_index{
+	position:fixed;
+	top:20px;
+	right:10px;
+	font-size:16px;	
+
 }

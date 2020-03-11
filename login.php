@@ -85,7 +85,10 @@ if(!empty($_POST)){
       </dl>
       <div>
         <input type="submit" value="ログインする" />
-      </div>
+      </div><br>
+      <p>【テストユーザーアカウント】</p>
+      <p>メールアドレス：d.com</p>
+      <p>パスワード：1111</p>
       <?php if ($error['login'] === 'failed'): ?>
     			<p class="error">ログインに失敗しました。正しいメールアドレスとパスワードを入力してください。</p>
 	    		<?php endif; ?> 
