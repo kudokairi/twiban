@@ -77,9 +77,28 @@ if (!empty($_POST)) {
             <section class="mypage_article">
             <p><?php print(htmlspecialchars($post['message'],ENT_QUOTES)); ?></p><br>
             <?php print(htmlspecialchars($post['created'],ENT_QUOTES)); ?>
+            <form id="fm1">
+                <input type="hidden" name="member_id" value="<?php print(htmlspecialchars($post['member_id']));?>">
+                <input type="hidden" name="id" value="<?php print(htmlspecialchars($post['id']));?>">
+                <a href="javascript:submitFnc();" style="color: #F33;">[削除]</a>
+            </form>
+
             </section>
         <?php endforeach; ?>
     </dl>
+    <script type="text/javascript">
+    function submitFnc() {
+        //formオブジェクトを取得する
+        var fm = document.getElementById("fm1");
+        //Submit形式指定する
+        fm.method = "post"; 
+        //action先を指定する
+        fm.action = "delete.php";
+        //Submit実行
+        fm.submit();
+    }
+    </script>
+
 
 </body>
 </html>
