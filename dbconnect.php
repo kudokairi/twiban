@@ -1,6 +1,6 @@
 <?php
 try{
-    $db = new PDO('mysql:dbname=twitter_cl; host=127.0.0.1; charset=utf8', 'root' , 'kudodesu');
+    $db = new PDO('mysql:dbname=twitter_cl; host; charset=utf8', user , password);
 }catch(PDOException $e){
     print('DB接続エラー:' . $e->getMessage());
 }
