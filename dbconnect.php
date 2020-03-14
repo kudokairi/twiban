@@ -1,6 +1,8 @@
 <?php
+require('db_date.php');
+session_start();
 try{
-    $db = new PDO('mysql:dbname=twitter_cl; host=127.0.0.1; charset=utf8', 'root' , 'kudodesu');
+    $db = new PDO($dsn, $user , $password);
 }catch(PDOException $e){
     print('DB接続エラー:' . $e->getMessage());
 }

@@ -50,6 +50,9 @@ if(isset($_REQUEST['res'])){
 
 }
 
+$thread = $db->prepare('SELECT * FROM thread WHERE member_id=?');
+$thread ->execute(array($_SESSION['id']));
+
 
 
 ?>
@@ -61,7 +64,7 @@ if(isset($_REQUEST['res'])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ひとこと掲示板</title>
+    <title>twiban</title>
     <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -92,11 +95,11 @@ if(isset($_REQUEST['res'])){
                     <p>
                         <input class="profile_submit" type="submit" value="投稿する" />
                     </p>
-                </div>
             </form>
+            
         </div>
+                    </div>
         <div id="content">
-            <div style="text-align: right"><a href="logout.php">ログアウト</a></div>
             <?php foreach ($posts as $post): ?>
             <div class="main_msg">
                 <img src="member_picture/<?php print(htmlspecialchars($post['picture'], ENT_QUOTES)); ?>" width="48"
@@ -131,7 +134,7 @@ if(isset($_REQUEST['res'])){
 
                     [<a href="delete.php?id=<?php print(htmlspecialchars($post['id'])); ?>" style="color: #F33;">削除</a>]
                     <?php endif; ?>
-                </p>
+                </p><br>
             </div>
             <?php endforeach; ?>
 
@@ -148,7 +151,23 @@ if(isset($_REQUEST['res'])){
                 <li>次のページへ</li>
                 <?php endif; ?>
             </ul>
+                </div>
+
+        <div class="thread_wrap">
+        <form action="thread.php" method="POST">
+                    <p class="thread_plus">スレッド作成</p>
+                        <input type="text" name="thread_name" class="thread_name">
+                        <input type="submit" value="作成する" class="thread_make">
+            </form>
+            <?php foreach($thread as $threads) :?>
+                <a class="thread_link" href="thread.php?id=<?php print(htmlspecialchars($threads['id'], ENT_QUOTES)); ?>"><?php print(htmlspecialchars($threads['title'], ENT_QUOTES)); ?></a><br>
+            <?php endforeach; ?>
+            <div style="text-align: right"><a href="logout.php">ログアウト</a></div>
+
+            </div>
+
         </div>
+        
     </div>
 </body>
 
