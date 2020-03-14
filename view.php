@@ -6,10 +6,9 @@ if(empty($_REQUEST['id'])){
     header('Location: index.php');
     exit();
 }
-
+var_dump($_REQUEST['id']);
 $posts = $db->prepare('SELECT m.name, m.picture, p.* FROM members m, posts p WHERE m.id=p.member_id AND p.id=? UNION SELECT m.name, m.picture, p.* FROM members m, posts p WHERE m.id=p.member_id AND p.reply_message_id=?');
 $posts->execute(array($_REQUEST['id'],$_REQUEST['id']));
-
 ?>
 
 
@@ -31,7 +30,11 @@ $posts->execute(array($_REQUEST['id'],$_REQUEST['id']));
             <h1>ひとこと掲示板</h1>
         </div>
         <div id="content">
-            <p>&laquo;<a href="index.php">一覧にもどる</a></p>
+            <?php if($_REQUEST['thread_id'] > 0):?>
+                <p>&laquo;<a href="thread.php">一覧にもどる</a></p>
+            <?php else: ?>
+                <p>&laquo;<a href="index.php">一覧にもどる</a></p>
+           <?php endif ;?>
             <?php foreach($posts as $posted): ?>
             <div class="msg">
                 <div class="message_img">

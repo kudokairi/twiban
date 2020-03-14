@@ -5,6 +5,8 @@ require('dbconnect.php');
 if(isset($_SESSION['id'])){
     $id = $_REQUEST['id'];
     $member_id = $_REQUEST['member_id'];
+    $thread_id = $_REQUEST['thread_id'];
+
 
     $messages = $db->prepare('SELECT * FROM posts WHERE id=?');
     $messages->execute(array($id));
@@ -18,6 +20,8 @@ if(isset($_SESSION['id'])){
 
 if(isset($member_id)){
     header('Location: mypage.php');
+}else if($thread_id > 0){
+    header('Location: thread.php');
 }else{
     header('Location: index.php');
 }

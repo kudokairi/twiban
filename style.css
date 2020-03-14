@@ -1,8 +1,7 @@
 * {
 	margin:0;
 	padding:0;
-ÃƒÆ’Ã‚Â£ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬}
-
+}
 body{
 	font:13px/1.231 arial,helvetica,clean,sans-serif;
 	font-size:small;
@@ -66,11 +65,17 @@ h2 {
 
 #content {
 	padding: 20px;
-	width: 720px;
+	padding-left: 0;
+	width: 100%;
+	max-width: 420px;
 	min-height: 490px;
 	margin: 0 auto;
 	margin-bottom: 10px;
 	font-size: 153.9%;
+}
+
+#thread_content{
+	width:30%;
 }
 
 * html #content {
@@ -126,7 +131,7 @@ li {
 }
 
 .paging {
-	margin-top: 10px;
+	margin-top: 20px;
 	text-align: center;
 }
 .paging li {
@@ -151,8 +156,12 @@ li {
 }
 
 .main_msg{
-border-top: 1px solid #ccc;
-padding: 10px 0;
+	border-top: 1px solid #ccc;
+	padding: 10px 0;
+	margin-left: 0px;
+	max-width: 400px;
+	width: 100%;
+	font-size: 16px;
 }
 
 .main_msg img {
@@ -180,6 +189,13 @@ margin-right: 5px;
 .msg .day a {
 	font-size: 80%;
 	color: #999;
+}
+
+.thread_link{
+	margin-bottom: 10px;
+	display: inline-block;
+	font-size: 16px;
+	/* padding: 10px; */
 }
 
 .main_msg .day a {
@@ -222,9 +238,23 @@ margin-right: 5px;
 } 
 
 .profile{
-	max-width:100%;
-	margin: 10px 10px; 
+	max-width: 350px;
+	margin: 10px 30px;
+	margin-right: 0;
+	width: 100%;
 }
+
+.thread_profile{
+	width: 30%;
+	margin: 30px;
+}
+
+.thread_profile img{
+	max-width: 400px;
+	width:100%;
+	}
+  
+
 .profile img{
   max-width: 350px;
   width:100%;
@@ -238,14 +268,17 @@ margin-right: 5px;
   max-width: 350px;
   width:100%;
   height: 100px;
+  margin-bottom:20px;
 }
 
 .profile_name{
   font-size: 20px;
+  margin-top: 40px;
 }
 
 .profile_submit{
 	font-size:20px;
+	max-width: 350px;
 	width:100%;
 	height:100%;
 }
@@ -272,6 +305,52 @@ margin-right: 5px;
 	width:100%;
 	margin:0 auto;
 	padding:0;
+}
+
+.thread_title{
+	font-size: 20px;
+	text-align: center;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	border-bottom: darkblue 3px solid;
+}
+
+.thread_plus{
+	border-left: 5px solid #106eb7;
+	padding-left: 5px;
+	margin-top: 10px;
+	margin-bottom: 5px;
+	font-size: 16px;
+}
+
+
+.thread_name{
+	max-width: 350px;
+    width: 100%;
+	margin-bottom: 20px;
+	font-size: 16px;
+}
+
+.thread_make{
+	max-width: 350px;
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.to_top{
+	position: fixed;
+	right: 40px;
+	top: 30px;
+}
+
+.thread_wrap{
+	max-width: 250px;
+	width: 100%;
+	margin: 20p;
+	padding-right: 50px;
+	padding-top: 20px;
 }
 
 .mypage_changes_submit{
