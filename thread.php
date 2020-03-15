@@ -38,7 +38,6 @@ if(isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()){
 
       }
   }
-
   if ($_REQUEST['id'] === '' || $_REQUEST['id'] === NULL) {
       $thread_titles = $db->prepare('SELECT * FROM thread WHERE title=?');
       $thread_titles->execute(array($_SESSION['thread_name']));
@@ -59,7 +58,8 @@ if($page == ''){
 }
 $page = max($page, 1);
 
-$counts = $db->query('SELECT COUNT(*) AS cnt FROM posts');
+$counts = $db->prepare('SELECT COUNT(*) AS cnt FROM posts WHERE thread_id=?');
+$counts->execute(array($_SESSION['thread_id']));
 $cnt = $counts->fetch();
 $maxPage = ceil($cnt['cnt'] / 5);
 $page = min($page, $maxPage);
@@ -182,13 +182,13 @@ if(isset($_REQUEST['res'])){
             <?php endforeach; ?>
             <ul class="paging">
                 <?php if($page > 1): ?>
-                <li><a href="index.php?page=<?php print(htmlspecialchars($page - 1)); ?>">前のページへ</a></li>
+                <li><a href="thread.php?page=<?php print(htmlspecialchars($page - 1)); ?>">前のページへ</a></li>
                 <?php else: ?>
                 <li>前のページへ</li>
                 <?php endif; ?>
 
                 <?php if($page < $maxPage): ?>
-                <li><a href="index.php?page=<?php print(htmlspecialchars($page + 1)); ?>">次のページへ</a></li>
+                <li><a href="thread.php?page=<?php print(htmlspecialchars($page + 1)); ?>">次のページへ</a></li>
                 <?php else: ?>
                 <li>次のページへ</li>
                 <?php endif; ?>
