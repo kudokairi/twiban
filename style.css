@@ -32,9 +32,7 @@ body {
 	height: 100%;
 }
 
-#content div a{
-font-size:16px;
-}
+#content div a{font-size: 12px;}
 
 #wrap {
 	display: flex;
@@ -64,15 +62,29 @@ h2 {
 }
 
 #content {
-	padding: 20px;
+	padding: 0 20px 0 20px;
 	padding-left: 20px;
 	width: 100%;
 	max-width: 650px;
-	min-height: 490px;
-	margin: 0 auto;
-	margin-bottom: 10px;
+	height: 100vh;
+	/* margin: 30px auto; */
+	/* margin-bottom: 10px; */
 	font-size: 153.9%;
 }
+
+
+#login_content {
+	padding: 0 20px 0 20px;
+	padding-left: 20px;
+	width: 100%;
+	max-width: 650px;
+	height: 100vh;
+	margin: 30px auto;
+	/* margin-bottom: 10px; */
+	font-size: 153.9%;
+}
+
+
 
 #thread_content{
 	width:30%;
@@ -133,6 +145,7 @@ li {
 .paging {
 	margin-top: 20px;
 	text-align: center;
+	font-size: 16px;
 }
 .paging li {
 	display: inline;
@@ -157,17 +170,20 @@ li {
 
 .main_msg{
 	border-top: 1px solid #ccc;
-	padding: 10px 0;
+	/* padding: 10px 0; */
+	padding-top: 10px;
 	margin-left: 0px;
 	max-width: 400px;
 	width: 100%;
 	font-size: 16px;
 }
 
-.main_msg img {
-float: left;
-margin-right: 5px;
+.main_msg p {
+    word-wrap: break-word;
+    text-align: justify;
 }
+
+.main_msg img {float: left;margin-right: 5px;margin-bottom: 45px;}
 
 .msg img {
 	float: left;
@@ -363,4 +379,23 @@ margin-right: 5px;
 	right:10px;
 	font-size:16px;	
 
+}
+
+.empty{
+	margin: 0;
+	padding: 0;
+	color: red;
+	font-size: 16px;
+}
+
+
+.thread_search{
+	max-width: 350px;
+    width: 100%;
+    font-size: 20px;
+}
+
+.detail_comments{
+    display: flex;
+	justify-content: space-between;
 }

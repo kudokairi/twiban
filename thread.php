@@ -15,16 +15,16 @@ if(isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()){
     exit();
 }
 
+//新規スレッド登録
+if ($_SESSION['thread_name'] !== '' && $_SESSION['thread_name'] !== null && $_SESSION['registered'] !== $_SESSION['thread_name']) {
+    $thread = $db->prepare('INSERT INTO thread SET member_id=?, title=?, created=NOW()');
+    $thread->execute(array($_SESSION['id'],$_SESSION['thread_name']));
+    $_SESSION['registered'] = $_SESSION['thread_name'];
+}
+
 
   //スレッドネームをDB登録
   if (!empty($_POST)) {
-      if ($_POST['thread_name'] !== '' && $_POST['thread_name'] !== null) {
-          $_SESSION['thread_name'] = $_POST['thread_name'];
-          $thread = $db->prepare('INSERT INTO thread SET member_id=?, title=?, created=NOW()');
-          $thread->execute(array($_SESSION['id'],$_SESSION['thread_name']));
-          header('Location: thread.php');
-          exit();
-      }
 
       //スレコメントをDB登録
       if ($_POST['message'] !== '') {
@@ -33,17 +33,16 @@ if(isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()){
           }
           $message = $db->prepare('INSERT INTO posts SET member_id=?, message=?, reply_message_id=?, thread_id=?, created=NOW()');
           $message->execute(array($member['id'], $_POST['message'],$_POST['reply_post_id'], $_SESSION['thread_id']));
-          header('Location: thread.php');
-          exit();
-
       }
   }
-  if ($_REQUEST['id'] === '' || $_REQUEST['id'] === NULL) {
+  if ($_REQUEST['id'] === '' or $_REQUEST['id'] === NULL) {
       $thread_titles = $db->prepare('SELECT * FROM thread WHERE title=?');
       $thread_titles->execute(array($_SESSION['thread_name']));
       $thread_title = $thread_titles->fetch();
       $_SESSION['thread_id'] = $thread_title['id'];
-   }else{
+   }
+
+   if($_REQUEST['id'] !== '' && $_REQUEST['id'] !== NULL){
       $thread_titles = $db->prepare('SELECT * FROM thread WHERE id=?');
       $thread_titles->execute(array($_REQUEST['id']));     
       $thread_title = $thread_titles->fetch();
@@ -154,8 +153,9 @@ if(isset($_REQUEST['res'])){
                     <?php endif; ?>
 
                 </p>
-                <p><?php print(htmlspecialchars($post['message'], ENT_QUOTES)); ?>[<a
+                <p><?php print(htmlspecialchars($post['message'], ENT_QUOTES)); ?><br>[<a
                         href="thread.php?res=<?php print(htmlspecialchars($post['id'],ENT_QUOTES)); ?>">Re</a>]</p>
+            <div class="detail_comments">            
                 <form id="<?php print(htmlspecialchars($post['id']));?>">
                     <input type="hidden" name="thread_id" value="<?php print(htmlspecialchars($post['thread_id']));?>">
                     <input type="hidden" name="id" value="<?php print(htmlspecialchars($post['id']));?>">
@@ -164,19 +164,24 @@ if(isset($_REQUEST['res'])){
                             href="javascript:submitFnc(<?php print(htmlspecialchars($post['id']));?>);"><?php print(htmlspecialchars($post['created'], ENT_QUOTES)); ?></a>
                 </form>
                 <?php if($post['reply_message_id'] > 0) :?>
-                <a href="view.php?id=<?php print(htmlspecialchars($post['reply_message_id'])) ?>">
+                    <form id="<?php print(htmlspecialchars($post['reply_message_id']));?>">
+                    <input type="hidden" name="thread_id" value="<?php print(htmlspecialchars($post['thread_id']));?>">
+                    <input type="hidden" name="id" value="<?php print(htmlspecialchars($post['reply_message_id']));?>">
+                    <p class="day">
+                    <a href="javascript:submitFnc2(<?php print(htmlspecialchars($post['reply_message_id'])) ?>)">
                     返信元のメッセージ</a>
+                </form>
                 <?php endif; ?>
-
                 <?php if($_SESSION['id'] === $post['member_id']): ?>
                 <form id="fm1">
                     <input type="hidden" name="thread_id" value="<?php print(htmlspecialchars($post['thread_id']));?>">
                     <input type="hidden" name="id" value="<?php print(htmlspecialchars($post['id']));?>">
                     <a href="javascript:submitFnc1(<?php print(htmlspecialchars($post['id']));?>);"
-                        style="color: #F33;">[削除]</a>
+                        style="color: #F33;">delete</a>
                 </form>
                 <?php endif; ?>
                 </p>
+                </div>
             </div>
 
             <?php endforeach; ?>
@@ -198,10 +203,8 @@ if(isset($_REQUEST['res'])){
     </div>
     <script type="text/javascript">
             function submitFnc(id) {
-                console.log("in");
                 //formオブジェクトを取得する
                 var fm = document.getElementById(id);
-                console.log(fm);
                 //Submit形式指定する
                 fm.method = "post";
                 //action先を指定する
@@ -219,6 +222,13 @@ if(isset($_REQUEST['res'])){
                 fm1.action = "delete.php";
                 //Submit実行
                 fm1.submit();
+            }
+
+            function submitFnc2(id){
+                var fm2 = document.getElementById(id);
+                fm2.method = "post";
+                fm2.action = "view.php";
+                fm2.submit();
             }
             </script>
 

@@ -56,7 +56,7 @@ if(!empty($_POST)){
   <div id="head">
     <h1>ログインする</h1>
   </div>
-  <div id="content">
+  <div id="login_content">
     <div id="lead">
       <p>メールアドレスとパスワードを記入してログインしてください。</p>
       <p>入会手続きがまだの方はこちらからどうぞ。</p>
