@@ -17,9 +17,36 @@ if(!empty($_POST)){
   if($_POST['message'] !== ''){
     $message = $db->prepare('INSERT INTO posts SET member_id=?, message=?, reply_message_id=?, created=NOW()');
     $message->execute(array($member['id'], $_POST['message'],$_POST['reply_post_id']));
- 
-    header('Location: index.php');
-    exit();
+
+    if(isset($_POST['search_thread_name']) && $_POST['search_thread_name'] !== ""){
+        $search = 'SELECT * FROM thread WHERE title like :title';
+        $search_result = $db->prepare($search);
+    
+        $search_name = $_POST['search_thread_name'];
+        $search_name = '%'.$search_name.'%';
+        $search_result->bindParam(':title', $search_name, PDO::PARAM_STR);
+        $search_result->execute();
+    }
+
+    if(isset($_POST['thread_name'])){
+        if($_POST['thread_name'] === ""){
+            $error['thread_name'] = 'empty';
+        }else{
+            $thread = $db->prepare('SELECT * FROM thread WHERE title=?');
+            $thread->execute(array($_POST['thread_name']));
+            $threads =  $thread->fetch();
+            if ($threads === false) {
+                $_SESSION['thread_name'] = $_POST['thread_name'];
+                header('Location: thread.php');
+                exit();
+            } else {
+                $error['thread_name'] = 'same';
+            }
+        }
+    }
+    
+
+
   }
 }
 
@@ -29,6 +56,7 @@ if($page == ''){
 }
 $page = max($page, 1);
 
+//投稿一覧のページネーション
 $counts = $db->query('SELECT COUNT(*) AS cnt FROM posts');
 $cnt = $counts->fetch();
 $maxPage = ceil($cnt['cnt'] / 5);
@@ -40,6 +68,29 @@ $posts = $db->prepare('SELECT m.name, m.picture, p.* FROM members m, posts p WHE
 $posts->bindParam(1,$start,PDO::PARAM_INT);
 $posts->execute();
 
+
+//スレッド一覧のページネーション
+$thread_page = $_REQUEST['thread_page'];
+if($thread_page == ''){
+  $thread_page = 1;
+}
+$thread_page = max($thread_page, 1);
+
+
+$thread_counts = $db->query('SELECT COUNT(*) AS thread_cnt FROM thread');
+$thread_cnt = $thread_counts->fetch();
+$thread_maxPage = ceil($thread_cnt['thread_cnt'] / 15);
+$thread_page = min($thread_page, $thread_maxPage);
+
+
+$thread_start = ($thread_page - 1) * 15;
+$thread_id = $_SESSION['id'];
+
+$thread = $db->prepare('SELECT * FROM thread WHERE member_id=? ORDER BY created DESC LIMIT ?,15');
+$thread->bindParam(2,$thread_start,PDO::PARAM_INT);
+$thread->bindParam(1,$thread_id,PDO::PARAM_INT);
+$thread->execute();
+
 if(isset($_REQUEST['res'])){
   $response = $db->prepare('SELECT m.name, m.picture, p.* FROM members m, posts p WHERE m.id=p.member_id AND p.id=?');
   $response->execute(array($_REQUEST['res']));
@@ -50,8 +101,7 @@ if(isset($_REQUEST['res'])){
 
 }
 
-$thread = $db->prepare('SELECT * FROM thread WHERE member_id=?');
-$thread ->execute(array($_SESSION['id']));
+
 
 
 
@@ -93,7 +143,7 @@ $thread ->execute(array($_SESSION['id']));
                 </dl>
                 <div>
                     <p>
-                        <input class="profile_submit" type="submit" value="投稿する" />
+                        <input class="profile_submit" type="submit" value="post" />
                     </p>
             </form>
             
@@ -120,7 +170,7 @@ $thread ->execute(array($_SESSION['id']));
                     <?php endif; ?>
 
                 </p>
-                <p><?php print(htmlspecialchars($post['message'], ENT_QUOTES)); ?>[<a
+                <p><?php print(htmlspecialchars($post['message'], ENT_QUOTES)); ?><br>[<a
                         href="index.php?res=<?php print(htmlspecialchars($post['id'],ENT_QUOTES)); ?>">Re</a>]</p>
                 <p class="day"><a
                         href="view.php?id=<?php print(htmlspecialchars($post['id'])) ?>"><?php print(htmlspecialchars($post['created'], ENT_QUOTES)); ?></a>
@@ -132,7 +182,7 @@ $thread ->execute(array($_SESSION['id']));
 
                     <?php if($_SESSION['id'] === $post['member_id']): ?>
 
-                    [<a href="delete.php?id=<?php print(htmlspecialchars($post['id'])); ?>" style="color: #F33;">削除</a>]
+                    [<a href="delete.php?id=<?php print(htmlspecialchars($post['id'])); ?>" style="color: #F33;">delete</a>]
                     <?php endif; ?>
                 </p><br>
             </div>
@@ -140,32 +190,77 @@ $thread ->execute(array($_SESSION['id']));
 
             <ul class="paging">
                 <?php if($page > 1): ?>
-                <li><a href="index.php?page=<?php print(htmlspecialchars($page - 1)); ?>">前のページへ</a></li>
+                <li><a href="index.php?page=<?php print(htmlspecialchars($page - 1)); ?>">back</a></li>
                 <?php else: ?>
-                <li>前のページへ</li>
+                <li>first</li>
                 <?php endif; ?>
 
                 <?php if($page < $maxPage): ?>
-                <li><a href="index.php?page=<?php print(htmlspecialchars($page + 1)); ?>">次のページへ</a></li>
+                <li><a href="index.php?page=<?php print(htmlspecialchars($page + 1)); ?>">next</a></li>
                 <?php else: ?>
-                <li>次のページへ</li>
+                <li>last</li>
                 <?php endif; ?>
             </ul>
                 </div>
 
-        <div class="thread_wrap">
-        <form action="thread.php" method="POST">
-                    <p class="thread_plus">スレッド作成</p>
-                        <input type="text" name="thread_name" class="thread_name">
-                        <input type="submit" value="作成する" class="thread_make">
-            </form>
-            <?php foreach($thread as $threads) :?>
-                <a class="thread_link" href="thread.php?id=<?php print(htmlspecialchars($threads['id'], ENT_QUOTES)); ?>"><?php print(htmlspecialchars($threads['title'], ENT_QUOTES)); ?></a><br>
-            <?php endforeach; ?>
-            <div style="text-align: right"><a href="logout.php">ログアウト</a></div>
+
+                <div class="thread_wrap">
+        <form action="" method="POST">
+                    <p class="thread_plus">スレッド検索</p>
+                        <input type="text" name="search_thread_name" class="thread_name" value="<?php print(htmlspecialchars($_POST['search_thread_name'], ENT_QUOTES));?>">
+                        <input type="submit" value="search" class="thread_search">
+            </form><br>
+            <?php if(isset($search_result)) :?>
+                <?php foreach( $search_result as $search_results) :?>
+                    <a class="thread_link" href="thread.php?id=<?php print(htmlspecialchars($search_results['id'], ENT_QUOTES)); ?>"><?php print(htmlspecialchars($search_results['title'],ENT_QUOTES)); ?></a>
+                <?php endforeach ;?>
+                
+            <?php elseif(empty($search_result) && $_POST["search_thread_name"] ==="") :?>    　
+               <div class="empty"><?php print("入力欄が空です") ; ?></div>  
+            <?php endif ;?>
+
+
+
+
 
             </div>
 
+
+        <div class="thread_wrap">
+        <form action="" method="POST">
+                    <p class="thread_plus">スレッド作成</p>
+                        <input type="text" name="thread_name" class="thread_name">
+                        <input type="submit" value="make" class="thread_make">
+            </form>
+
+            <?php if ($error['thread_name'] === 'empty'): ?>
+    			<p class="empty">新規スレッドネームを入力してください</p>
+            <?php endif; ?> 
+
+            <?php if ($error['thread_name'] === 'same'): ?>
+    			<p class="empty">そのスレッドは既に存在しています</p>
+            <?php endif; ?> 
+
+
+            <?php foreach($thread as $threads) :?>
+                <a class="thread_link" href="thread.php?id=<?php print(htmlspecialchars($threads['id'], ENT_QUOTES)); ?>"><?php print(htmlspecialchars($threads['title'], ENT_QUOTES)); ?></a><br>
+            <?php endforeach; ?>
+            <ul class="paging">
+                <?php if($thread_page > 1): ?>
+                <li><a href="index.php?thread_page=<?php print(htmlspecialchars($thread_page - 1)); ?>">back</a></li>
+                <?php else: ?>
+                <li>first</li>
+                <?php endif; ?>
+
+                <?php if($thread_page < $thread_maxPage): ?>
+                <li><a href="index.php?thread_page=<?php print(htmlspecialchars($thread_page + 1)); ?>">next</a></li>
+                <?php else: ?>
+                <li>last</li>
+                <?php endif; ?>
+            </ul>
+
+
+            <div style="text-align: right; font-size:16px; margin-top:60px"><a href="logout.php">logout</a></div>
         </div>
         
     </div>
